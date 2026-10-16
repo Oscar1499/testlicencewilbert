@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test de licencia de armas de fuego</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f0;--card:#fff;--ink:#12303a;--mute:#4d6a72;--line:#c5d3d0;--acc:#0f4c5c;--accink:#fff;--ok:#1b7a3d;--okbg:#dff3e5;--bad:#b3261e;--badbg:#fbe3e1;--gold:#8a6400;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f2a33;--card:#17394a;--ink:#eaf2f0;--mute:#9fb8bd;--line:#2c5565;--acc:#f5c518;--accink:#10252c;--ok:#6fd48c;--okbg:#17432f;--bad:#ff8a80;--badbg:#4a2326;--gold:#f5c518}}
+:root[data-theme="dark"]{--bg:#0f2a33;--card:#17394a;--ink:#eaf2f0;--mute:#9fb8bd;--line:#2c5565;--acc:#f5c518;--accink:#10252c;--ok:#6fd48c;--okbg:#17432f;--bad:#ff8a80;--badbg:#4a2326;--gold:#f5c518}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 17px/1.5 Barlow,"Segoe UI",Arial,sans-serif}
+main{max-width:680px;margin:0 auto;padding:20px 16px 48px}
+h1,h2{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;font-weight:700;line-height:1.05;margin:0}
+h1{font-size:clamp(34px,8vw,48px)}
+h2{font-size:26px}
+.sub{color:var(--mute);margin:10px 0 22px}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.big{display:block;width:100%;text-align:left;padding:16px 18px;margin:0 0 10px;border-radius:10px;border:2px solid var(--acc);background:var(--acc);color:var(--accink);font-weight:600;font-size:18px}
+.big small{display:block;font-weight:400;opacity:.85}
+.big.alt{background:var(--card);color:var(--ink);border-color:var(--line)}
+.topics{display:grid;gap:8px;margin-top:8px}
+.topics button{display:flex;justify-content:space-between;padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card)}
+.topics span{color:var(--mute)}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 18px}
+.bar i{display:block;height:100%;background:var(--acc);transition:width .25s}
+.meta{display:flex;justify-content:space-between;color:var(--mute);font-size:15px}
+.q{font-size:22px;line-height:1.3;margin:6px 0 18px;font-weight:600}
+.opt{display:block;width:100%;text-align:left;padding:14px 16px;margin:0 0 10px;border-radius:10px;border:2px solid var(--line);background:var(--card)}
+.opt:not(:disabled):hover{border-color:var(--acc)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.no{border-color:var(--bad);background:var(--badbg)}
+.opt:disabled{cursor:default}
+.exp{margin:14px 0;padding:12px 16px;border-left:4px solid var(--gold);background:var(--card);border-radius:0 10px 10px 0}
+.score{font:700 72px/1 "Barlow Condensed","Arial Narrow",Arial,sans-serif;margin:8px 0}
+.rev{margin:10px 0;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.rev b{color:var(--ok)}
+.rev p{margin:4px 0}
+.foot{margin-top:28px;font-size:14px;color:var(--mute)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+// [tema, pregunta, respuesta correcta, incorrectas separadas por |, explicación]
+const Q=[
+["Examen psicológico","¿Cuánto tiempo tiene la persona para terminar el examen psicológico?","50 minutos","30 minutos|60 minutos|90 minutos","Pasado ese lapso el sistema se detiene y arroja inmediatamente la siguiente prueba."],
+["Examen psicológico","¿Cuántas posibles respuestas tiene cada pregunta del examen psicológico?","2","3|4|5","Cada respuesta tiene un puntaje y el resultado determina si la persona está o no apta, conforme su condición psíquica."],
+["Aspectos administrativos","Durante las evaluaciones y la exposición está prohibido:","Usar celulares y tomar fotos o grabar video","Llevar documentos de identidad|Tomar apuntes a mano|Hacer preguntas al instructor","Los celulares no se pueden usar dentro de las instalaciones ni del área de evaluación."],
+["Ley CRAMEAS","El objeto de la Ley CRAMEAS es:","Controlar y regular armas de fuego, municiones, explosivos y artículos similares","Prohibir toda tenencia de armas|Regular solo la caza deportiva|Regular únicamente a la PNC y la FAES","Abarca uso, fabricación, importación, exportación, comercialización, almacenaje, transporte, tenencia, portación, colección, reparación, modificación, recarga y polígonos de tiro."],
+["Licencias","Edad mínima general para obtener la licencia de uso de armas de fuego:","21 años","18 años|23 años|25 años","Personal de alta de FAES, PNC, ANSP y quienes prestaron servicio militar pueden obtenerla a los 18 años."],
+["Licencias","¿Qué vigencia máxima debe tener la partida de nacimiento original para el trámite?","90 días","30 días|60 días|6 meses","Se pide original con vigencia de no más de 90 días."],
+["Licencias","Las fotocopias de DUI y NIT para el trámite de la licencia deben estar:","Ampliadas al 200%","A tamaño normal|Ampliadas al 150%|Autenticadas por notario","DUI y NIT ampliadas al 200%."],
+["Licencias","Quienes están declarados en estado de interdicción son personas con:","Incapacidad mental para administrar bienes","Antecedentes policiales leves|Menos de 21 años|Deudas con el Estado","A ellos no se les pueden conceder licencias ni matrículas."],
+["Licencias","Las personas con antecedentes penales y policiales pueden recibir licencia únicamente si el delito fue:","Culposo","Menos grave|De hace más de 5 años|Contra el patrimonio","La excepción son los delitos culposos."],
+["Reprobados (Art. 93)","Si reprueba por primera vez, ¿cuándo puede someterse a su segunda evaluación?","Transcurridos 30 días hábiles","Transcurridos 15 días hábiles|Transcurridos 60 días hábiles|Al día siguiente","1.ª vez: 30 D/Hab."],
+["Reprobados (Art. 93)","Tras reprobar por segunda vez, la tercera y última evaluación se puede hacer después de:","90 días hábiles","30 días hábiles|6 meses|1 año","2.ª vez: 90 D/Hab."],
+["Reprobados (Art. 93)","Si reprueba por tercera vez, puede volver a someterse al proceso:","Transcurrido 1 año, con solicitud y autorización de la Dirección de Logística","Nunca más|Transcurridos 2 años sin trámite|Transcurridos 90 días","Requiere solicitud previa y autorización de la Dir. Log."],
+["Tipos de licencias","Las licencias de uso, reparación, recarga, explosivos y comercialización vencen cada:","3 años","2 años|5 años|10 años","Vencimiento cada 3 años."],
+["Tipos de licencias","Las licencias relacionadas con productos pirotécnicos vencen cada:","5 años","1 año|3 años|10 años","Fabricación, comercialización, manipulación en espectáculos y artesana pirotécnica: cada 5 años."],
+["Tipos de licencias","La licencia para la reparación de armas de fuego autoriza:","Reparar y modificar armas con fines comerciales","Portar armas en lugares públicos|Recargar munición|Importar armas sin permiso","Es una licencia para quien repara o modifica armas de forma comercial."],
+["Matrículas","La matrícula de tenencia y conducción vence cada:","5 años","3 años|2 años|Nunca","Tenencia y conducción: 5 años."],
+["Matrículas","La matrícula de portación vence cada:","3 años","5 años|1 año|Nunca","Portación: 3 años."],
+["Matrículas","La matrícula para colección:","Nunca vence","Vence cada 5 años|Vence cada 3 años|Vence cada 10 años","Faculta la tenencia para exhibición de armas de guerra inutilizadas, antiguas, obsoletas o de valor histórico."],
+["Matrículas","Por \"conducción\", el arma debe transportarse:","Descargada y desaprovisionada","Cargada pero con seguro|Solo con cargador puesto|Con una bala en la recámara","La tenencia permite tenerla cargada en propiedad, negocio u oficina; la conducción, solo descargada."],
+["Matrículas","Edad mínima para la matrícula de portación (salvo FAES, PNC y ANSP):","24 años","18 años|21 años|25 años","Colección y tenencia/conducción piden más de 21 años; portación, más de 24."],
+["Matrículas","¿Qué documento comprueba la adquisición del arma para matricularla?","Escritura pública de compraventa o factura original con hoja balística","Solo la licencia de uso|Una carta del vendedor|Constancia de la PNC","Además: sin antecedentes penales, solvencia PNC, solicitud llena, copia y originales de DUI, NIT y licencia."],
+["Refrendas","Para refrendar la matrícula, además de los documentos, debe presentarse el arma con:","Cuatro cartuchos sólidos nuevos","Un cargador lleno|Diez cartuchos usados|Ningún cartucho","También matrícula vencida, folder tamaño carta, sin antecedentes penales y solvencia PNC."],
+["Refrendas","Para refrendar la licencia debe presentar:","La licencia vencida","La licencia original sin vencer|Solo el DUI|La factura del arma","También copia y originales de DUI y NIT al 200%, folder carta, sin antecedentes y solvencia PNC."],
+["Armas y municiones","Calibre máximo permitido para revólveres, pistolas, fusiles y carabinas:","Hasta 11.6 mm","Hasta 9 mm|Hasta 7.62 mm|Hasta 12.7 mm","Escopetas: desde 0.410\" hasta 0.775\"."],
+["Armas y municiones","¿Cuál NO es un arma prohibida por la ley para particulares?","Escopeta dentro del calibre permitido","Arma de guerra (salvo Art. 72)|Arma de fabricación artesanal|Arma de mayor calibre al permitido","Las armas de guerra, artesanales y de mayor calibre están prohibidas."],
+["Armas y municiones","¿Cuál de estas municiones está permitida por la ley?","Expansiva y de punta hueca","Perforante|Incendiaria|Explosiva","Permitidas: convencionales y sólidas, perdigones o postas (escopetas), expansivas y de punta hueca."],
+["Armas y municiones","¿Cuál de estas municiones está prohibida?","Cartucho explosivo flechette","Perdigones para escopeta|Munición sólida convencional|Punta hueca","Prohibidas: explosivas, perforantes, incendiarias y flechette."],
+["Artículos de la ley","Art. 19: para comprar un arma en un establecimiento autorizado debe presentar:","Su licencia para uso de armas de fuego","Su matrícula de portación|Una escritura pública|Solvencia de la alcaldía","Para matricularla presentará la factura extendida por el establecimiento."],
+["Artículos de la ley","Art. 21: ¿cuántas armas de fuego pueden comprarse por persona natural o jurídica?","Una cada dos años","Dos cada año|Una cada año|Una cada cinco años","No podrán comprarse más de un arma de fuego cada dos años."],
+["Artículos de la ley","Art. 22: todo traspaso de dominio de un arma debe constar en:","Escritura pública","Documento privado|Acta municipal|Factura simple","Es obligatoria la escritura pública."],
+["Traspaso de dominio","Tras la escritura de traspaso, el COMPRADOR debe registrar el arma en:","15 días","10 días hábiles|30 días|3 días hábiles","Y el VENDEDOR debe informar al MDN en 10 días hábiles."],
+["Traspaso de dominio","Tras la escritura de traspaso, el VENDEDOR debe informar al MDN en:","10 días hábiles","15 días calendario|30 días hábiles|24 horas","El comprador tiene 15 días para registrar el arma."],
+["Reposición","Si extravía su arma, licencia o matrícula, ¿en cuánto tiempo debe informar?","24 horas","3 días|10 días|30 días","Debe obtener constancia de denuncia de la PNC y acudir a la ORCAF."],
+["Reposición","Para tramitar la reposición de licencias y matrículas extraviadas se cuenta con:","30 días hábiles","15 días hábiles|10 días calendario|90 días hábiles","Plazo para tramitar la reposición."],
+["Artículos de la ley","Art. 28: la autorización especial para que otra persona porte el arma debe estar:","Legalizada ante notario, junto con la matrícula original o fotocopia certificada","Firmada solo por el dueño|Autorizada por el alcalde|Escrita a mano y sin legalizar","Si la PNC la requiere y no la tiene, el arma será decomisada."],
+["Artículos de la ley","Art. 35: sin permiso especial se pueden importar hasta:","200 municiones para armas autorizadas","500 municiones|50 municiones|Una arma de fuego","También hasta 5 libras de pólvora, cañones, cargadores, cachas, accesorios de mantenimiento y sistemas de puntería no prohibidos."],
+["Artículos de la ley","Art. 36: al ingresar al país, un salvadoreño puede traer en su equipaje por año:","Hasta 2 armas de fuego y 200 municiones","1 arma y 100 municiones|5 armas y 500 municiones|Ninguna arma sin matrícula previa","Requiere autorización provisional del MDN previa a la importación."],
+["Artículos de la ley","Art. 36: tras ingresar las armas, ¿cuándo debe iniciar el trámite de matrícula?","En 3 días hábiles","En 24 horas|En 15 días|En 30 días hábiles","No iniciarlo después de 3 días hábiles es falta menos grave."],
+["Artículos de la ley","Art. 59: ¿qué está prohibido sin autorización del MDN?","Alterar número de serie, cambiar cañón o calibre, empavonar o niquelar el arma","Limpiar el arma|Guardar el arma en caja fuerte|Cambiar las cachas por mantenimiento","Con autorización previa del MDN sí se pueden hacer esas modificaciones."],
+["Artículos de la ley","Art. 62: ¿en cuál de estos lugares está prohibido portar armas?","Bancos, hoteles y gasolineras","En su propia casa|En un polígono autorizado|En su vehículo descargada","También centros sociales, culturales y educativos, parques de esparcimiento y áreas naturales protegidas."],
+["Artículos de la ley","Art. 62A: los lugares de veda de portación se definen mediante:","Decreto ejecutivo publicado en el Diario Oficial","Orden de la PNC|Acuerdo municipal|Resolución del juez","El Presidente, a solicitud del alcalde y en coordinación con los ministros de Seguridad y Defensa."],
+["Sanciones (Art. 67)","Falta menos grave: suspensión de licencia o matrícula de hasta:","3 meses","1 mes|6 meses|2 años","Multa de hasta 1 salario mínimo urbano vigente."],
+["Sanciones (Art. 67)","Falta grave: suspensión de 3 meses hasta:","2 años","1 año|5 años|Cancelación definitiva","Multa de hasta 10 salarios mínimos urbanos."],
+["Sanciones (Art. 67)","Falta muy grave: multa de hasta:","50 salarios mínimos urbanos","10 salarios mínimos urbanos|20 salarios mínimos urbanos|100 salarios mínimos urbanos","Y suspensión de la licencia, permiso, matrícula o autorización."],
+["Faltas (Art. 68)","Portar el arma con la matrícula vencida se sanciona con:","25% del salario mínimo urbano","5% del salario mínimo urbano|50% del salario mínimo urbano|Dos salarios mínimos","Lo mismo aplica a portar con licencia vencida."],
+["Faltas (Art. 68)","Portar arma sin llevar la licencia o matrícula (aunque la tenga vigente) se sanciona con:","5% del salario mínimo urbano","25% del salario mínimo urbano|Un salario mínimo|Dos salarios mínimos","Falta menos grave."],
+["Faltas (Art. 68)","No registrar la escritura de traspaso en 15 días se sanciona con:","50% del salario mínimo urbano","5% del salario mínimo urbano|25% del salario mínimo urbano|Un salario mínimo","Falta menos grave."],
+["Faltas (Art. 68)","Portar un arma en estado de ebriedad (con licencia y matrícula) se sanciona con:","Doble del salario mínimo urbano","Un salario mínimo|Cinco salarios mínimos|20 veces el salario mínimo","Falta grave; igual que portar en lugares prohibidos por el Art. 62."],
+["Faltas (Art. 68)","Escandalizar con un arma en la vía pública (disparos al aire) se sanciona con:","10 salarios mínimos urbanos","Un salario mínimo|Doble del salario mínimo|50 salarios mínimos","Falta grave."],
+["Faltas (Art. 68)","Utilizar municiones no permitidas por la ley se sanciona con:","5 salarios mínimos urbanos","Un salario mínimo|10 salarios mínimos|20 salarios mínimos","Falta grave; vender munición sin pedir la matrícula tiene la misma sanción."],
+["Faltas (Art. 68)","Modificar o reparar armas sin autorización del MDN (por ejemplo, empavonar) es falta:","Muy grave: 20 veces el salario mínimo urbano","Grave: 10 salarios mínimos|Menos grave: 25% del salario|Grave: 5 salarios mínimos","También alterar marca, modelo, calibre o serie, y convertir armas en automáticas."],
+["Faltas (Art. 68)","Desviar armas de fuego a terceros destinatarios fuera del país se sanciona con:","50 veces el salario mínimo urbano","10 veces el salario mínimo|20 veces el salario mínimo|Un salario mínimo","Es de las faltas muy graves."],
+["Recurso (Art. 68A)","El recurso de inconformidad contra una sanción se presenta en:","10 días hábiles, por escrito, ante la Oficina de Registro de Armas del MDN","30 días, de forma verbal|5 días, ante la PNC|15 días, ante un juez","Puede presentarlo la persona natural o jurídica sancionada."],
+["Destrucción de armas","Una causal de destrucción de armas de fuego (Arts. 75 y 76) es:","Que sean armas prohibidas","Que estén matriculadas|Que sean de colección|Que el dueño viaje al extranjero","También: no reclamadas, no pago de multas o imposibilidad de devolución, y orden judicial."],
+["Seguridad","¿Dónde debe mantener el dedo hasta estar listo para disparar?","Fuera del disparador","Sobre el disparador|Sobre el martillo|En el cargador","Regla básica de seguridad."],
+["Seguridad","¿Cómo debe tratarse siempre cada arma?","Como si estuviera cargada","Como si estuviera descargada si tiene seguro|Según quien la entregue|Como cargada solo en el polígono","Aun cuando crea que está descargada."],
+["Seguridad","¿Por qué nunca se debe disparar al aire o al agua?","La bala cae con la misma velocidad con que sube","Se daña el cañón|Desperdicia munición|El ruido molesta","Una bala perdida puede herir o matar."],
+["Seguridad","¿Cómo debe guardarse el arma en casa?","Descargada, separada de la munición, bajo llave (preferible caja fuerte)","Cargada y bajo la almohada|Con cargador puesto en un cajón|Con el seguro puesto al alcance","Y nunca al alcance de niños."],
+["Seguridad","¿Dónde solo se debe entrenar o practicar?","En polígonos autorizados por el MDN","En cualquier terreno privado|En el patio de casa|En zonas rurales","Operar un polígono sin autorización es falta muy grave."],
+["Seguridad","Después de disparar todos los tiros del cargador de una pistola, la corredera debe:","Quedar hacia atrás","Quedar cerrada|Quedar sin tocar|Cerrarse con la bala siguiente","Y se debe comprobar que no queden tiros en la recámara."],
+["Partes del arma","En un revólver, el tambor también se llama:","Cilindro","Corredera|Recámara fija|Guardamonte","Otras partes: cañón, alza, punto de mira, martillo, disparador, varilla del extractor."],
+["Partes del arma","En una escopeta, la mazorca también se conoce como:","Corredera","Garganta|Talón|Tubo de abastecimiento","Otras partes: culata, garganta, caja de mecanismos, recámara, cañón, tubo de abastecimiento, talón o amortiguador."],
+["Partes del arma","En una pistola, la pieza que protege el disparador es el:","Guardamonte","Retén del cargador|Alza|Seguro del pestillo","También: corredera, cañón, martillo, seguro, empuñadura o cacha, cargador."],
+["Partes del arma","En el fusil M-16, ¿cuál es el nombre de la pieza que selecciona el tipo de fuego?","Selector de fuego","Palanca de cargar|Apagallamas|Guardamanos","Otras partes: culata, anillas, adaptador de bayoneta, cajón de mecanismos."]
+];
+const $=s=>document.querySelector(s),app=$('#app');
+const sh=a=>{a=a.slice();for(let i=a.length;i>1;){const j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const topics=[...new Set(Q.map(q=>q[0]))];
+let S;
+function clear(){app.replaceChildren();window.scrollTo(0,0)}
+function home(){
+clear();
+app.append(el('h1',0,'Licencia de armas de fuego'),el('p','sub','Practica para el examen teórico y la prueba de seguridad con preguntas de la capacitación de la Ley CRAMEAS.'));
+const a=el('button','big','Simulacro de 20 preguntas');a.append(el('small',0,'Preguntas al azar de todos los temas'));a.onclick=()=>start(sh(Q).slice(0,20));
+const b=el('button','big alt','Todas las preguntas ('+Q.length+')');b.onclick=()=>start(Q);
+app.append(a,b,el('h2',0,'Practicar por tema'));
+const g=el('div','topics');
+topics.forEach(t=>{const n=Q.filter(q=>q[0]===t).length;const x=el('button',0,t);x.append(el('span',0,n));x.onclick=()=>start(Q.filter(q=>q[0]===t));g.append(x)});
+app.append(g,el('p','foot','Basado en la presentación de la Dirección de Logística. Los montos, plazos y requisitos pueden cambiar: confírmalos con la Oficina de Registro y Control de Armas de Fuego antes de tu trámite.'));
+}
+function start(list){S={l:sh(list),i:0,ok:0,bad:[]};ask()}
+function ask(){
+clear();
+const q=S.l[S.i],n=S.l.length;
+const m=el('div','meta');m.append(el('span',0,q[0]),el('span',0,(S.i+1)+' / '+n));
+const bar=el('div','bar');bar.append(document.createElement('i'));bar.firstChild.style.width=(S.i/n*100)+'%';
+app.append(m,bar,el('p','q',q[1]));
+const opts=sh([[q[2],1],...q[3].split('|').map(x=>[x,0])]);
+const box=el('div'),fb=el('div');
+opts.forEach(([txt,c])=>{
+const o=el('button','opt',txt);
+o.onclick=()=>{
+[...box.children].forEach((b,k)=>{b.disabled=true;if(opts[k][1])b.classList.add('ok')});
+if(c){S.ok++}else{o.classList.add('no');S.bad.push(q)}
+fb.append(el('div','exp',(c?'Correcto. ':'Incorrecto. ')+q[4]));
+const nx=el('button','big',S.i+1<n?'Siguiente':'Ver resultado');
+nx.onclick=()=>{S.i++;S.i<n?ask():done()};
+fb.append(nx);nx.focus();
+};
+box.append(o)});
+app.append(box,fb);
+}
+function done(){
+clear();
+const n=S.l.length,p=Math.round(S.ok/n*100);
+app.append(el('h2',0,'Resultado'),el('div','score',p+'%'),el('p','sub','Acertaste '+S.ok+' de '+n+' preguntas.'));
+if(S.bad.length){
+const r=el('button','big','Repetir solo las falladas ('+S.bad.length+')');r.onclick=()=>start(S.bad);app.append(r);
+}
+const h=el('button','big alt','Volver al inicio');h.onclick=home;app.append(h);
+if(S.bad.length){
+app.append(el('h2',0,'Para repasar'));
+S.bad.forEach(q=>{const d=el('div','rev');d.append(el('p',0,q[1]));const a=el('p');a.append(el('b',0,q[2]));d.append(a,el('p','foot',q[4]));app.append(d)});
+}
+}
+home();
+</script>
+</body>
+</html>
